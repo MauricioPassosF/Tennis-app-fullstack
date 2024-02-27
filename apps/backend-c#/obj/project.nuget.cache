@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "5XB6LpDLUd4+Zv29wChu9o2NDDz8lnTcArR2QeRY3k0lg003kFYtTCbgTuy9mxvQp5xqz5foukmmG5vQmaqTaQ==",
+  "success": true,
+  "projectFilePath": "/home/mauricio/dev/projetos/Tennis-app-fullstack/apps/backend-c#/backend-c#.csproj",
+  "expectedPackageFiles": [
+    "/home/mauricio/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/home/mauricio/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/home/mauricio/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "/home/mauricio/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "/home/mauricio/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "/home/mauricio/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.5.0/swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
