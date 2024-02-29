@@ -80,3 +80,5 @@
 /home/mauricio/dev/projetos/Tennis-app-fullstack/apps/backend-c#/obj/Debug/net6.0/ref/backend-c#.dll
 /home/mauricio/dev/projetos/Tennis-app-fullstack/apps/backend-c#/obj/Debug/net6.0/backend-c#.pdb
 /home/mauricio/dev/projetos/Tennis-app-fullstack/apps/backend-c#/obj/Debug/net6.0/backend-c#.genruntimeconfig.cache
+/home/mauricio/dev/projetos/Tennis-app-fullstack/apps/backend-c#/bin/Debug/net6.0/FluentAssertions.dll
+/home/mauricio/dev/projetos/Tennis-app-fullstack/apps/backend-c#/bin/Debug/net6.0/FluentAssertions.AspNetCore.Mvc.dll

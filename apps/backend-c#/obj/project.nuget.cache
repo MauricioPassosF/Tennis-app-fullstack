@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "Z8dZWBf7UL7GZpovXPqtNQTkizPlFZq9DE+Yk9CO/OosWSae+p58W4yG6hw4RrlRz/wG45O7f9SFr/SX05sPWw==",
+  "dgSpecHash": "RueqIq31lJDdS+KerPXbybDmIb6OarD0fOQJIeONcbe1D36tAFFyia9NrxI6BThbSoLTGq6YVCy/liMZVxGA8g==",
   "success": true,
   "projectFilePath": "/home/mauricio/dev/projetos/Tennis-app-fullstack/apps/backend-c#/backend-c#.csproj",
   "expectedPackageFiles": [
     "/home/mauricio/.nuget/packages/azure.core/1.24.0/azure.core.1.24.0.nupkg.sha512",
     "/home/mauricio/.nuget/packages/azure.identity/1.6.0/azure.identity.1.6.0.nupkg.sha512",
+    "/home/mauricio/.nuget/packages/fluentassertions/6.0.0/fluentassertions.6.0.0.nupkg.sha512",
+    "/home/mauricio/.nuget/packages/fluentassertions.aspnetcore.mvc/4.2.0/fluentassertions.aspnetcore.mvc.4.2.0.nupkg.sha512",
     "/home/mauricio/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/mauricio/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.1/microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "/home/mauricio/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
