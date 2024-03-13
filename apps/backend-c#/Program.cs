@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<TennisContext>();
 builder.Services.AddScoped<ITennisContext, TennisContext>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

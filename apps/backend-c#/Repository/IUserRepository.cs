@@ -1,6 +1,5 @@
 namespace Tennis.Repository;
 using Tennis.Models;
-
 public interface IUserRepository
 {
   User? GetUserById(int id);
