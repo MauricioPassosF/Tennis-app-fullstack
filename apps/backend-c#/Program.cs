@@ -3,9 +3,12 @@ using Tennis.Repository;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<TennisContext>();
-
 builder.Services.AddControllers();
+builder.Services.AddDbContext<TennisContext>();
+builder.Services.AddScoped<ITennisContext, TennisContext>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
