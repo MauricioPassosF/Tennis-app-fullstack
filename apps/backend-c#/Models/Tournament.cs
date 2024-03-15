@@ -7,8 +7,8 @@ public class Tournament
 {
   [Key]
   public int TournamentId { get; set; }
-  public string? Name { get; set; }
-  public string? Status { get; set; }
+  public string Name { get; set; } = String.Empty;
+  public string Status { get; set; } = String.Empty;
   public int PrizeMoney { get; set; }
   public virtual ICollection<Game>? Games { get; set; }
   public virtual ICollection<PlayerTournament>? PlayerTournaments { get; set; }

@@ -1,8 +1,10 @@
 namespace Tennis.Repository;
 using Tennis.Models;
+using Tennis.DTO;
+
 public interface IPlayerRepository
 {
-  Player? GetPlayerById(int id);
-  IEnumerable<Player> GetAllPlayers();
-  Player AddPlayer(Player player);
+  PlayerDTO? GetPlayerById(int id);
+  IEnumerable<PlayerDTO> GetAllPlayers();
+  PlayerAddDTO AddPlayer(Player player);
 }

@@ -1,5 +1,7 @@
 namespace Tennis.Repository;
 
+using Microsoft.EntityFrameworkCore;
+using Tennis.DTO;
 using Tennis.Models;
 
 public class PlayerRepository : IPlayerRepository
@@ -10,18 +12,43 @@ public class PlayerRepository : IPlayerRepository
     _context = context;
   }
 
-  public Player? GetPlayerById(int id)
+  public PlayerDTO? GetPlayerById(int id)
   {
-    return _context.Players.FirstOrDefault(player => player.PlayerId == id);
+    var player = _context.Players
+    .Include(player => player.User)
+    .FirstOrDefault(player => player.PlayerId == id);
+    if (player == null || player.User == null) { return null; };
+    return new PlayerDTO
+    {
+      playerId = player.PlayerId,
+      status = player.Status,
+      firstName = player.User.FirstName,
+      lastName = player.User.LastName,
+      email = player.User.Email,
+    };
   }
-  public IEnumerable<Player> GetAllPlayers()
+  public IEnumerable<PlayerDTO> GetAllPlayers()
   {
-    return _context.Players;
+    return _context.Players.Include(player => player.User)
+      .Where(player => player.User != null)
+      .Select(player => new PlayerDTO
+      {
+        playerId = player.PlayerId,
+        status = player.Status,
+        firstName = player.User!.FirstName,
+        lastName = player.User!.LastName,
+        email = player.User!.Email,
+      }).ToList();
   }
-  public Player AddPlayer(Player player)
+  public PlayerAddDTO AddPlayer(Player player)
   {
     _context.Players.Add(player);
     _context.SaveChanges();
-    return player;
+    return new PlayerAddDTO
+    {
+      playerId = player.PlayerId,
+      status = player.Status,
+      userId = player.UserId
+    };
   }
 }
