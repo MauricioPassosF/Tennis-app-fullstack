@@ -5,10 +5,15 @@ namespace Tennis.Models;
 
 public class Player
 {
+  public Player()
+  {
+    PlayerTournaments = new List<PlayerTournament>();
+  }
+
   [Key]
   public int PlayerId { get; set; }
   public string Status { get; set; } = String.Empty;
-  public virtual ICollection<PlayerTournament>? PlayerTournaments { get; set; }
+  public virtual IEnumerable<PlayerTournament> PlayerTournaments { get; set; }
   public virtual ICollection<Game>? GamesPlayerA { get; set; }
   public virtual ICollection<Game>? GamesPlayerB { get; set; }
 
@@ -16,3 +21,4 @@ public class Player
   public int UserId { get; set; }
   public virtual User? User { get; set; }
 }
+

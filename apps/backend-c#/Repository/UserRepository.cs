@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Tennis.DTO;
 using Tennis.Models;
 
@@ -33,6 +34,20 @@ public class UserRepository : IUserRepository
       firstName = user.FirstName,
       lastName = user.LastName,
       email = user.Email
+    }).ToList();
+  }
+
+  public IEnumerable<TournamentInfoDTO>? GetUserTournaments(int userId)
+  {
+    var user = _context.Users
+    .Include(user => user.Tournaments)
+    .FirstOrDefault(user => user.UserId == userId);
+    if (user == null || user.Tournaments == null) { return null; }
+    return user.Tournaments.Select(tournament => new TournamentInfoDTO
+    {
+      tournamentId = tournament.TournamentId,
+      tournamentName = tournament.Name,
+      tournamentStatus = tournament.Status
     }).ToList();
   }
 

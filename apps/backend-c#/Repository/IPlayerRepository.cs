@@ -7,4 +7,5 @@ public interface IPlayerRepository
   PlayerDTO? GetPlayerById(int id);
   IEnumerable<PlayerDTO> GetAllPlayers();
   PlayerAddDTO AddPlayer(Player player);
+  IEnumerable<TournamentInfoDTO>? GetPlayerTournaments(int playerId);
 }

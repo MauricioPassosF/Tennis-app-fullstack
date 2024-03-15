@@ -58,4 +58,12 @@ public class TournamentRepository : ITournamentRepository
       userId = tournament.UserId
     };
   }
+
+  public PlayerTournament AddPlayerInTournament(PlayerTournament playerTournamentInfo)
+  {
+    _context.PlayerTournaments.Add(playerTournamentInfo);
+    _context.SaveChanges();
+    return playerTournamentInfo;
+  }
+
 }

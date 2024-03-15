@@ -1,5 +1,6 @@
 namespace Tennis.Repository;
 
+using System.Drawing.Drawing2D;
 using Microsoft.EntityFrameworkCore;
 using Tennis.DTO;
 using Tennis.Models;
@@ -40,6 +41,24 @@ public class PlayerRepository : IPlayerRepository
         email = player.User!.Email,
       }).ToList();
   }
+
+  public IEnumerable<TournamentInfoDTO>? GetPlayerTournaments(int playerId)
+  {
+    var player = _context.Players
+    .Include(player => player.PlayerTournaments)
+    .ThenInclude(playerTournament => playerTournament.Tournament)
+    .FirstOrDefault(player => player.PlayerId == playerId);
+    if (player == null || player.PlayerTournaments == null) { return null; }
+    return player.PlayerTournaments
+      .Where(playerTournament => playerTournament.Tournament != null)
+      .Select(playerTournament => new TournamentInfoDTO
+      {
+        tournamentId = playerTournament.Tournament!.TournamentId,
+        tournamentName = playerTournament.Tournament!.Name,
+        tournamentStatus = playerTournament.Tournament!.Status
+      }).ToList();
+  }
+
   public PlayerAddDTO AddPlayer(Player player)
   {
     _context.Players.Add(player);

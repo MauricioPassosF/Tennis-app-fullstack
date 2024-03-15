@@ -19,3 +19,10 @@ public class TournamentAddDTO
   public int userId { get; set; }
 
 }
+
+public class TournamentInfoDTO
+{
+  public int tournamentId { get; set; }
+  public string tournamentName { get; set; } = String.Empty;
+  public string tournamentStatus { get; set; } = String.Empty;
+}

@@ -32,6 +32,12 @@ public class UserController : Controller
     return Ok(_repository.GetAllUsers());
   }
 
+  [HttpGet("{userId}/tournaments")]
+  public IActionResult GetTournaments(int userId)
+  {
+    return Ok(_repository.GetUserTournaments(userId));
+  }
+
   [HttpPost]
   public IActionResult Add([FromBody] User user)
   {

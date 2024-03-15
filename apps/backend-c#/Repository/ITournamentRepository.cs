@@ -7,4 +7,5 @@ public interface ITournamentRepository
   TournamentDTO? GetTournamentById(int id);
   IEnumerable<TournamentDTO> GetAllTournaments();
   TournamentAddDTO AddTournament(Tournament tournament);
+  PlayerTournament AddPlayerInTournament(PlayerTournament playerTournamentInfo);
 }
