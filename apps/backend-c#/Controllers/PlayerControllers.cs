@@ -35,6 +35,12 @@ public class PlayerController : Controller
     return Ok(_repository.GetPlayerTournaments(playerId));
   }
 
+  [HttpGet("{playerId}/games")]
+  public IActionResult Getgames(int playerId)
+  {
+    return Ok(_repository.GetPlayerGames(playerId));
+  }
+
   [HttpPost]
   public IActionResult Add([FromBody] Player player)
   {

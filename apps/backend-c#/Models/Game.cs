@@ -5,11 +5,12 @@ namespace Tennis.Models;
 
 public class Game
 {
+
   [Key]
   public int GameId { get; set; }
   public int PlayerAScore { get; set; }
   public int PlayerBScore { get; set; }
-  public string? Status { get; set; }
+  public string Status { get; set; } = String.Empty;
 
   [ForeignKey("PlayerAId")]
   public int PlayerAId { get; set; }

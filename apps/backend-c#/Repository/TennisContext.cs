@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tennis.Models;
 namespace Tennis.Repository;
 public class TennisContext : DbContext, ITennisContext
@@ -14,6 +15,11 @@ public class TennisContext : DbContext, ITennisContext
   {
     optionsBuilder.UseSqlServer(_connectionString);
   }
+  public override EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
+  {
+    return base.Entry(entity);
+  }
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<Player>()

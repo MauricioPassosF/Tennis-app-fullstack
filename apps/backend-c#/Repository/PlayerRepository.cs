@@ -59,6 +59,26 @@ public class PlayerRepository : IPlayerRepository
       }).ToList();
   }
 
+  public IEnumerable<GameInfoPlayerDTO>? GetPlayerGames(int playerId)
+  {
+    var player = _context.Players
+    .Include(player => player.GamesPlayerA)
+    .Include(player => player.GamesPlayerB)
+    .FirstOrDefault(player => player.PlayerId == playerId);
+    if (player == null || player.GamesPlayerA == null || player.GamesPlayerB == null) { return null; }
+    var games = player.GamesPlayerA.Concat(player.GamesPlayerB);
+    return games.Select(game => new GameInfoPlayerDTO
+    {
+      gameId = game.GameId,
+      gameStatus = game.Status,
+      tournamentId = game.TournamentId,
+      playerScore = game.PlayerAId == playerId ? game.PlayerAScore : game.PlayerBScore,
+      opponentId = game.PlayerAId == playerId ? game.PlayerBId : game.PlayerAId,
+      opponentScore = game.PlayerAId == playerId ? game.PlayerBScore : game.PlayerAScore
+    }).ToList();
+  }
+
+
   public PlayerAddDTO AddPlayer(Player player)
   {
     _context.Players.Add(player);

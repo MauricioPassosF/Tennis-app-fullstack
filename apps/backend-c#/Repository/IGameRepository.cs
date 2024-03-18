@@ -1,10 +1,11 @@
+using Tennis.DTO;
 using Tennis.Models;
 
 namespace Tennis.Repository;
 
 public interface IGameRepository
 {
-  Game? GetGameById(int gameId);
-  IEnumerable<Game> GetAllGames();
-  Game? AddGame(Game game);
+  GameDTO? GetGameById(int gameId);
+  IEnumerable<GameDTO> GetAllGames();
+  AddGameDTO AddGame(Game game);
 }
