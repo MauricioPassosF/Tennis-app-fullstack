@@ -28,8 +28,6 @@ public class TournamentRepository : ITournamentRepository
       admLastName = tournament.User.LastName
     };
   }
-
-
   public IEnumerable<TournamentDTO> GetAllTournaments()
   {
     return _context.Tournaments
@@ -45,6 +43,25 @@ public class TournamentRepository : ITournamentRepository
       admLastName = tournament.User!.LastName
     }).ToList();
   }
+  public IEnumerable<PlayerDTO>? GetTournamentPlayers(int tournamentId)
+  {
+    var tournament = _context.Tournaments
+      .Include(tournament => tournament.PlayerTournaments)
+      .ThenInclude(tournamentPlayer => tournamentPlayer.Player)
+      .ThenInclude(player => player.User)
+      .FirstOrDefault(tournament => tournament.TournamentId == tournamentId);
+    if (tournament == null || tournament.PlayerTournaments == null) { return null; }
+    return tournament.PlayerTournaments
+    .Where(playerTournament => playerTournament.Tournament != null)
+    .Select(playerTournament => new PlayerDTO
+    {
+      playerId = playerTournament.PlayerId,
+      status = playerTournament.Player.Status,
+      firstName = playerTournament.Player.User!.FirstName,
+      lastName = playerTournament.Player.User!.LastName,
+      email = playerTournament.Player.User!.Email
+    }).ToList();
+  }
   public TournamentAddDTO AddTournament(Tournament tournament)
   {
     _context.Tournaments.Add(tournament);
@@ -58,7 +75,6 @@ public class TournamentRepository : ITournamentRepository
       userId = tournament.UserId
     };
   }
-
   public PlayerTournament AddPlayerInTournament(PlayerTournament playerTournamentInfo)
   {
     _context.PlayerTournaments.Add(playerTournamentInfo);
