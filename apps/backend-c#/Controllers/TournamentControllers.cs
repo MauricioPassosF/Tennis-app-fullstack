@@ -42,7 +42,7 @@ public class TournamentController : Controller
   }
 
   [HttpPost("addPlayer")]
-  public IActionResult Add([FromBody] PlayerTournament playerTournamentInfo)
+  public IActionResult AddPlayer([FromBody] PlayerTournament playerTournamentInfo)
   {
     return Created("", _repository.AddPlayerInTournament(playerTournamentInfo));
   }
