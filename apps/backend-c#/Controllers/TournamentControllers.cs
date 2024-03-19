@@ -30,9 +30,15 @@ public class TournamentController : Controller
   }
 
   [HttpGet("{tournamentId}/players")]
-  public IActionResult GetTournaments(int tournamentId)
+  public IActionResult GetTournamentPlayers(int tournamentId)
   {
     return Ok(_repository.GetTournamentPlayers(tournamentId));
+  }
+
+  [HttpGet("{tournamentId}/games")]
+  public IActionResult GetTournamentGames(int tournamentId)
+  {
+    return Ok(_repository.GetTournamentGames(tournamentId));
   }
 
   [HttpPost]

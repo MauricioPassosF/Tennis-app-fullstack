@@ -24,6 +24,18 @@ public class AddGameDTO
   public int playerBId { get; set; }
 }
 
+public class GameInfoTournamentDTO
+{
+  public int gameId { get; set; }
+  public string gameStatus { get; set; } = String.Empty;
+  public int playerAScore { get; set; }
+  public string playerAFirstName { get; set; } = String.Empty;
+  public string playerALastName { get; set; } = String.Empty;
+  public int playerBScore { get; set; }
+  public string playerBFirstName { get; set; } = String.Empty;
+  public string playerBLastName { get; set; } = String.Empty;
+}
+
 public class GameInfoPlayerDTO
 {
   public int gameId { get; set; }

@@ -62,6 +62,32 @@ public class TournamentRepository : ITournamentRepository
       email = playerTournament.Player.User!.Email
     }).ToList();
   }
+  public IEnumerable<GameInfoTournamentDTO>? GetTournamentGames(int tournamentId)
+  {
+    var games = _context.Games
+      .Include(game => game.Tournament)
+      .Include(game => game.PlayerA)
+      .Include(game => game.PlayerB)
+      .Where(game => game.TournamentId == tournamentId || game.PlayerA != null || game.PlayerB != null)
+      .ToList();
+    foreach (var game in games)
+    {
+      _context.Entry(game.PlayerA!).Reference(player => player.User).Load();
+      _context.Entry(game.PlayerB!).Reference(player => player.User).Load();
+    }
+    return games.Select(game => new GameInfoTournamentDTO
+    {
+      gameId = game.GameId,
+      gameStatus = game.Status,
+      playerAScore = game.PlayerAScore,
+      playerAFirstName = game.PlayerA!.User!.FirstName,
+      playerALastName = game.PlayerA.User.LastName,
+      playerBScore = game.PlayerBScore,
+      playerBFirstName = game.PlayerB!.User!.FirstName,
+      playerBLastName = game.PlayerB.User.LastName,
+    }).ToList();
+  }
+
   public TournamentAddDTO AddTournament(Tournament tournament)
   {
     _context.Tournaments.Add(tournament);
