@@ -1,9 +1,10 @@
 namespace Tennis.Repository;
 using Tennis.Models;
-
+using Tennis.DTO;
 public interface IUserRepository
 {
-  User? GetUserById(int id);
-  IEnumerable<User> GetAllUsers();
-  User AddUser(User user);
+  UserDTO? GetUserById(int id);
+  IEnumerable<UserDTO> GetAllUsers();
+  UserDTO AddUser(User user);
+  IEnumerable<TournamentInfoDTO>? GetUserTournaments(int userId);
 }
