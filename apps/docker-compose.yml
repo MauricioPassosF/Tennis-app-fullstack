@@ -4,15 +4,15 @@ services:
     container_name: frontend
     build: ./frontend-reactts
     ports:
-      - 3000:3000
+      - 3000:4173
     working_dir: /app-frontend
   backend:
     container_name: backend
     build: ./backend-c#
     ports:
-      - 5500:5500
+      - 8080:80
     working_dir: /app-backend
-    command: dev
+    # command: dev
     # volumes:
     #   - ./backend: /app-backend
     depends_on:

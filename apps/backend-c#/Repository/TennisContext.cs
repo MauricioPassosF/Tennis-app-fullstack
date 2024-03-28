@@ -4,7 +4,7 @@ using Tennis.Models;
 namespace Tennis.Repository;
 public class TennisContext : DbContext, ITennisContext
 {
-  private string _connectionString = "Server=127.0.0.1;Database=tennis_app;User=SA;Password=SqlServer123@;TrustServerCertificate=true";
+  private string _connectionString = "Server=db;User=SA;Password=SqlServer123@;TrustServerCertificate=true";
   public TennisContext(DbContextOptions<TennisContext> options) : base(options) { }
   public DbSet<User> Users { get; set; }
   public DbSet<Player> Players { get; set; }
