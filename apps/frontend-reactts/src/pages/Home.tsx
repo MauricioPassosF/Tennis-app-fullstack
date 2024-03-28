@@ -7,11 +7,13 @@ import AppContext from '../context/AppContext';
 function Home(): JSX.Element {
   const [count, setCount] = useState(0);
   const appContext = useContext(AppContext);
-  const { user } = appContext;
+
+  const { context: { user } } = appContext;
+
   return (
     <>
       <div>
-        <h1>{user}</h1>
+        <h1>{user ? `${user.firstName} ${user.lastName}` : ''}</h1>
         <h2>Test</h2>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
