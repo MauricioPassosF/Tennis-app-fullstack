@@ -25,6 +25,15 @@ type TournamentGame = {
   playerBLastName: string;
 };
 
+type AddGame = {
+  playerAScore: number;
+  playerBScore: number;
+  playerAId: number;
+  playerBId: number;
+  Status: string;
+  TournamentId: number;
+};
+
 const getTournamentInfo = async (tournamentId: number): Promise<TournamentInfo | undefined> => {
   try {
     const response = await fetch(
@@ -61,11 +70,52 @@ const getTournamentGames = async (tournamentId: number): Promise<TournamentGame[
   }
 };
 
+const initialNewGameInfo = {
+  playerAScore: 0,
+  playerBScore: 0,
+  playerAId: 0,
+  playerBId: 0,
+  Status: 'Agendada',
+};
+
+const addGame = async (
+  newGameInfo: AddGame,
+  // setNewGameInfo: (value: React.SetStateAction<AddGame>) => void,
+)
+: Promise<boolean | undefined> => {
+  try {
+    const response = await fetch('http://localhost:8080/game', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newGameInfo),
+    });
+    console.log(response);
+    return response.ok;
+    // if (response.ok) {
+    //   const data = await response.json();
+    //   setNewGameInfo({ ...initialNewGameInfo, TournamentId: newGameInfo.TournamentId });
+    //   console.log(data);
+    // }
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
+
 function Tournament(): JSX.Element {
   const location = useLocation();
   const tournamentId = useMemo(() => Number(location.pathname.split('/')[2]), [location]);
   const [tournamentInfo, setTournamentInfo] = useState<TournamentInfo | undefined>(undefined);
   const [tournamentGames, setTournamentGames] = useState<TournamentGame[]>([]);
+  const [addPlayerActive, setAddPlayerActive] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const [newGameInfo, setNewGameInfo] = useState<AddGame>({
+    ...initialNewGameInfo,
+    TournamentId: tournamentId,
+  });
+  const { playerAId, playerBId } = newGameInfo;
   useEffect(() => {
     async function fetchData() {
       const tournamentData: TournamentInfo | undefined = await getTournamentInfo(tournamentId);
@@ -78,10 +128,14 @@ function Tournament(): JSX.Element {
       }
     }
     fetchData();
-  }, []);
+  }, [refresh, tournamentId]);
+
+  const handleNewGameInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+    setNewGameInfo({ ...newGameInfo, [name]: value });
+  };
 
   return (
-
     <div>
       <div>
         {!tournamentInfo
@@ -93,7 +147,36 @@ function Tournament(): JSX.Element {
               <p>{`Prêmios: R$ ${tournamentInfo.prizeMoney}`}</p>
             </div>
           )}
-
+      </div>
+      <div>
+        <button type="button" onClick={() => setAddPlayerActive(true)}>Adicionar Jogo</button>
+        {addPlayerActive && (
+          <div>
+            <form>
+              <label htmlFor="playerAId">
+                Digite Id do jogador A:
+                <input type="number" name="playerAId" onChange={handleNewGameInfo} value={playerAId} />
+              </label>
+              <label htmlFor="playerBId">
+                Digite Id do jogador B:
+                <input type="number" name="playerBId" onChange={handleNewGameInfo} value={playerBId} />
+              </label>
+            </form>
+            <button
+              type="submit"
+              onClick={async () => {
+                const responseStatus = await addGame(newGameInfo);
+                if (responseStatus) {
+                  setAddPlayerActive(false);
+                  setNewGameInfo({ ...initialNewGameInfo, TournamentId: tournamentId });
+                  setRefresh(!refresh);
+                }
+              }}
+            >
+              Adicionar
+            </button>
+          </div>
+        )}
       </div>
       <div>
         {tournamentGames.length === 0 ? <h2>Nenhum jogo disponível</h2> : (
