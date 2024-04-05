@@ -77,8 +77,8 @@ public class Program
     }
     if (canConnect)
     {
-      context.Database.EnsureCreated();
       context.Database.Migrate();
+      context.Database.EnsureCreated();
     }
     else
     {

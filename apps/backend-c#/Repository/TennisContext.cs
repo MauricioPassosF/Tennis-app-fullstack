@@ -25,18 +25,26 @@ public class TennisContext : DbContext, ITennisContext
     modelBuilder.Entity<Player>()
     .HasOne(p => p.User)
     .WithOne(u => u.Player)
-    .HasForeignKey<Player>(u => u.UserId);
+    .HasForeignKey<Player>(u => u.UserId)
+    .OnDelete(DeleteBehavior.Restrict);
 
     modelBuilder.Entity<Tournament>()
     .HasOne(t => t.User)
     .WithMany(u => u.Tournaments)
-    .HasForeignKey(u => u.UserId);
+    .HasForeignKey(u => u.UserId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+    //   modelBuilder.Entity<PlayerTournament>()
+    //  .HasKey(pt => new { pt.PlayerId, pt.TournamentId });
+
+    modelBuilder.Entity<PlayerTournament>()
+    .HasKey(pt => new { pt.PlayerId, pt.TournamentId });
 
     modelBuilder.Entity<PlayerTournament>()
     .HasOne(pt => pt.Player)
     .WithMany(p => p.PlayerTournaments)
     .HasForeignKey(p => p.PlayerId)
-    .OnDelete(DeleteBehavior.Restrict); ;
+    .OnDelete(DeleteBehavior.Restrict);
 
     modelBuilder.Entity<PlayerTournament>()
     .HasOne(pt => pt.Tournament)

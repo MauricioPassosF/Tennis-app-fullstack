@@ -5,19 +5,16 @@ namespace Tennis.Models;
 
 public class PlayerTournament
 {
-  public PlayerTournament()
-  {
-    Player = new Player();
-  }
+  [Key, Column(Order = 1)]
+  // public int PlayerTournamentId { get; set; }
 
-  [Key]
-  public int PlayerTournamentId { get; set; }
-
-  [ForeignKey("TournamentId")]
+  // [ForeignKey("TournamentId")]
   public int TournamentId { get; set; }
   public virtual Tournament? Tournament { get; set; }
 
-  [ForeignKey("PlayerId")]
+  [Key, Column(Order = 2)]
+
+  // [ForeignKey("PlayerId")]
   public int PlayerId { get; set; }
-  public virtual Player Player { get; set; }
+  public virtual Player? Player { get; set; }
 }
