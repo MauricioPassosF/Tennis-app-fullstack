@@ -48,11 +48,11 @@ function Login(): JSX.Element {
       <form>
         <label htmlFor="email">
           Email:
-          <input type="text" id="email" name="email" value={email} placeholder="Digite o e-mail" onChange={handleLoginInputs} />
+          <input type="text" autoComplete="email" id="email" name="email" value={email} placeholder="Digite o e-mail" onChange={handleLoginInputs} />
         </label>
         <label htmlFor="password">
           Password:
-          <input type="password" id="password" name="password" value={password} placeholder="Digite a senha" onChange={handleLoginInputs} />
+          <input type="password" autoComplete="current-password" id="password" name="password" value={password} placeholder="Digite a senha" onChange={handleLoginInputs} />
         </label>
       </form>
       <button type="submit" onClick={login}>Login</button>
