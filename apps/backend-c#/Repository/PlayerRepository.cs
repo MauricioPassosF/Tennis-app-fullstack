@@ -81,6 +81,14 @@ public class PlayerRepository : IPlayerRepository
 
   public PlayerAddDTO AddPlayer(Player player)
   {
+
+    var user = _context.Users.SingleOrDefault(u => u.UserId == player.UserId);
+
+    if (user == null)
+    {
+      Console.WriteLine("------------------------Teste------------------------");
+      throw new Exception("User not found");
+    }
     _context.Players.Add(player);
     _context.SaveChanges();
     return new PlayerAddDTO

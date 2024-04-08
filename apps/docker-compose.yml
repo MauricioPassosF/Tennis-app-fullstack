@@ -1,0 +1,28 @@
+version: '3'
+services:
+  frontend:
+    container_name: frontend
+    build: ./frontend-reactts
+    ports:
+      - 3000:4173
+    working_dir: /app-frontend
+  backend:
+    container_name: backend
+    build: ./backend-c#
+    ports:
+      - 8080:80
+    working_dir: /app-backend
+    # command: dev
+    # volumes:
+    #   - ./backend: /app-backend
+    depends_on:
+      - db
+  db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: database-tennis-app
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SqlServer123@
+      - MSSQL_PID=Developer

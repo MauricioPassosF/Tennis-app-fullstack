@@ -45,18 +45,20 @@ public class TournamentRepository : ITournamentRepository
   }
   public IEnumerable<PlayerDTO>? GetTournamentPlayers(int tournamentId)
   {
-    var tournament = _context.Tournaments
-      .Include(tournament => tournament.PlayerTournaments)
-      .ThenInclude(tournamentPlayer => tournamentPlayer.Player)
-      .ThenInclude(player => player.User)
-      .FirstOrDefault(tournament => tournament.TournamentId == tournamentId);
-    if (tournament == null || tournament.PlayerTournaments == null) { return null; }
-    return tournament.PlayerTournaments
-    .Where(playerTournament => playerTournament.Tournament != null)
+    return _context.PlayerTournaments
+      .Where(playerTournament => playerTournament.TournamentId == tournamentId)
+      .Include(playerTournament => playerTournament.Tournament)
+      .Include(playerTournament => playerTournament.Player)
+      // .ThenInclude(tournamentPlayer => tournamentPlayer.Player)
+      .ThenInclude(player => player!.User)
+    // .FirstOrDefault(tournament => tournament.TournamentId == tournamentId);
+    // if (tournament == null || tournament.PlayerTournaments == null) { return null; }
+    // return tournament.PlayerTournaments
+    .Where(playerTournament => playerTournament.Player != null)
     .Select(playerTournament => new PlayerDTO
     {
       playerId = playerTournament.PlayerId,
-      status = playerTournament.Player.Status,
+      status = playerTournament.Player!.Status,
       firstName = playerTournament.Player.User!.FirstName,
       lastName = playerTournament.Player.User!.LastName,
       email = playerTournament.Player.User!.Email
@@ -103,6 +105,18 @@ public class TournamentRepository : ITournamentRepository
   }
   public PlayerTournament AddPlayerInTournament(PlayerTournament playerTournamentInfo)
   {
+    var player = _context.Players.Include(p => p.User).SingleOrDefault(p => p.PlayerId == playerTournamentInfo.PlayerId);
+
+    if (player == null)
+    {
+      Console.WriteLine("------------------------Teste2------------------------");
+      throw new Exception("Player not found");
+    }
+    else if (player.User == null)
+    {
+      throw new Exception("User not found for the given player");
+    }
+    // Console.WriteLine($"{playerTournamentInfo.PlayerTournamentId}");
     _context.PlayerTournaments.Add(playerTournamentInfo);
     _context.SaveChanges();
     return playerTournamentInfo;
