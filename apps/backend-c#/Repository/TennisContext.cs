@@ -4,8 +4,13 @@ using Tennis.Models;
 namespace Tennis.Repository;
 public class TennisContext : DbContext, ITennisContext
 {
-  private string _connectionString = "Server=db;User=SA;Password=SqlServer123@;TrustServerCertificate=true";
-  public TennisContext(DbContextOptions<TennisContext> options) : base(options) { }
+  private readonly IWebHostEnvironment _env;
+  public TennisContext(DbContextOptions<TennisContext> options, IWebHostEnvironment env) : base(options)
+  {
+    _env = env;
+  }
+  // private string _connectionString = "Server=db;User=SA;Password=SqlServer123@;TrustServerCertificate=true";
+
   public DbSet<User> Users { get; set; }
   public DbSet<Player> Players { get; set; }
   public DbSet<Game> Games { get; set; }
@@ -13,7 +18,10 @@ public class TennisContext : DbContext, ITennisContext
   public DbSet<PlayerTournament> PlayerTournaments { get; set; }
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    optionsBuilder.UseSqlServer(_connectionString);
+    string connectionString = _env.IsDevelopment()
+      ? "Server=localhost;User=SA;Password=SqlServer123@;TrustServerCertificate=true"
+      : "Server=db;User=SA;Password=SqlServer123@;TrustServerCertificate=true";
+    optionsBuilder.UseSqlServer(connectionString);
   }
   public override EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
   {
@@ -67,5 +75,22 @@ public class TennisContext : DbContext, ITennisContext
     .HasOne(g => g.Tournament)
     .WithMany(t => t.Games)
     .HasForeignKey(t => t.TournamentId);
+
+    modelBuilder.Entity<Player>()
+    .ToTable(t => t.HasCheckConstraint("CK_Player_Status", "Status IN ('Apto', 'Ausente', 'Lesionado')"));
+
+    modelBuilder.Entity<Tournament>()
+    .ToTable(t => t.HasCheckConstraint("CK_Tournament_Status", "Status IN ('Em andamento', 'Contínuo', 'Finalizado', 'Não iniciado')"));
+
+    modelBuilder.Entity<Game>()
+    .ToTable(t => t.HasCheckConstraint("CK_Game_Status", "Status IN ('Não agendado','Em andamento', 'Finalizado', 'Não iniciado')"));
+
+    modelBuilder.Entity<Tournament>()
+        .Property(t => t.PrizeMoney)
+        .HasPrecision(18, 2);
+
+    modelBuilder.Entity<Game>()
+    .Property(g => g.GameDateTime)
+    .IsRequired(false);
   }
 }

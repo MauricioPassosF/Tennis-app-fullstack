@@ -12,9 +12,10 @@ public class Tournament
 
   [Key]
   public int TournamentId { get; set; }
+  [Required]
   public string Name { get; set; } = String.Empty;
   public string Status { get; set; } = String.Empty;
-  public int PrizeMoney { get; set; }
+  public decimal PrizeMoney { get; set; } = 0;
   public virtual ICollection<Game>? Games { get; set; }
   public virtual IEnumerable<PlayerTournament> PlayerTournaments { get; set; }
 

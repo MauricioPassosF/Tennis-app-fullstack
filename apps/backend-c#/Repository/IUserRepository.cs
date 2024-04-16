@@ -7,4 +7,5 @@ public interface IUserRepository
   IEnumerable<UserDTO> GetAllUsers();
   UserDTO AddUser(User user);
   IEnumerable<TournamentInfoDTO>? GetUserTournaments(int userId);
+  UserDTO? Login(LoginDto loginInfo);
 }

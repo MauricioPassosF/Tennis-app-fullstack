@@ -81,6 +81,7 @@ public class TournamentRepository : ITournamentRepository
     {
       gameId = game.GameId,
       gameStatus = game.Status,
+      gameDateTime = game.GameDateTime,
       playerAScore = game.PlayerAScore,
       playerAFirstName = game.PlayerA!.User!.FirstName,
       playerALastName = game.PlayerA.User.LastName,

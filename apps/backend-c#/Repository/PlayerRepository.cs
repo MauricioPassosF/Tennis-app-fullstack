@@ -28,6 +28,19 @@ public class PlayerRepository : IPlayerRepository
       email = player.User.Email,
     };
   }
+
+  public PlayerInfoDTO? GetPlayerByUserId(int userId)
+  {
+    var player = _context.Players
+    .FirstOrDefault(player => player.UserId == userId);
+    if (player == null) { return null; };
+    return new PlayerInfoDTO
+    {
+      playerId = player.PlayerId,
+      status = player.Status,
+    };
+  }
+
   public IEnumerable<PlayerDTO> GetAllPlayers()
   {
     return _context.Players.Include(player => player.User)
@@ -71,6 +84,7 @@ public class PlayerRepository : IPlayerRepository
     {
       gameId = game.GameId,
       gameStatus = game.Status,
+      gameDateTime = game.GameDateTime,
       tournamentId = game.TournamentId,
       playerScore = game.PlayerAId == playerId ? game.PlayerAScore : game.PlayerBScore,
       opponentId = game.PlayerAId == playerId ? game.PlayerBId : game.PlayerAId,

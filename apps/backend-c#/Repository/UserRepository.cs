@@ -63,4 +63,18 @@ public class UserRepository : IUserRepository
       email = user.Email
     };
   }
+
+  public UserDTO? Login(LoginDto loginInfo)
+  {
+    var user = _context.Users
+    .FirstOrDefault(user => user.Email == loginInfo.email && user.Password == loginInfo.password);
+    if (user == null) { return null; };
+    return new UserDTO
+    {
+      userId = user.UserId,
+      firstName = user.FirstName,
+      lastName = user.LastName,
+      email = user.Email
+    };
+  }
 }

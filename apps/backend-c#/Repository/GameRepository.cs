@@ -29,6 +29,7 @@ public class GameRepository : IGameRepository
     {
       gameId = game.GameId,
       gameStatus = game.Status,
+      gameDateTime = game.GameDateTime,
       tournamentName = game.Tournament.Name,
       playerAScore = game.PlayerAScore,
       playerAFirstName = game.PlayerA.User!.FirstName,
@@ -55,6 +56,7 @@ public class GameRepository : IGameRepository
     {
       gameId = game.GameId,
       gameStatus = game.Status,
+      gameDateTime = game.GameDateTime,
       tournamentName = game.Tournament!.Name,
       playerAScore = game.PlayerAScore,
       playerAFirstName = game.PlayerA!.User!.FirstName,
@@ -76,7 +78,8 @@ public class GameRepository : IGameRepository
       playerBId = game.PlayerBId,
       playerBScore = game.PlayerBScore,
       tournamentId = game.TournamentId,
-      gameStatus = game.Status
+      gameStatus = game.Status,
+      gameDateTime = game.GameDateTime
     };
   }
 }

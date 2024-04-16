@@ -6,6 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Tennis.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Tennis.Services;
 
 
 public class Program
@@ -25,6 +31,23 @@ public class Program
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddAuthentication(options =>
+    {
+      options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+      options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(options =>
+    {
+      options.SaveToken = true;
+      options.RequireHttpsMetadata = false;
+      options.TokenValidationParameters = new TokenValidationParameters()
+      {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("testetestetesteTESTE"))
+      };
+    });
 
     // var port = builder.Configuration["PORT"];
     // builder.WebHost.UseUrls($"http://*:{port};http://localhost:5500");
