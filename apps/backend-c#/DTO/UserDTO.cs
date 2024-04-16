@@ -8,3 +8,9 @@ public class UserDTO
   public string lastName { get; set; } = String.Empty;
   public string email { get; set; } = String.Empty;
 }
+
+public class LoginDto
+{
+  public string email { get; set; } = String.Empty;
+  public string password { get; set; } = String.Empty;
+}

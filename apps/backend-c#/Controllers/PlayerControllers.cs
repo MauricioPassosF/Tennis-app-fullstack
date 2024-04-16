@@ -19,12 +19,23 @@ public class PlayerController : Controller
   }
 
   [HttpGet("{playerId}")]
-  public IActionResult GetbyId(int playerId)
+  public IActionResult GetById(int playerId)
   {
     var player = _repository.GetPlayerById(playerId);
     if (player == null)
     {
       return BadRequest(new { message = "Jogador não cadastrado" });
+    }
+    return Ok(player);
+  }
+
+  [HttpGet("user/{userId}")]
+  public IActionResult GetByUserId(int userId)
+  {
+    var player = _repository.GetPlayerByUserId(userId);
+    if (player == null)
+    {
+      return BadRequest(new { message = "Usuário não está cadastrado como jogador" });
     }
     return Ok(player);
   }

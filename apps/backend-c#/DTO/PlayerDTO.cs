@@ -14,3 +14,9 @@ public class PlayerAddDTO
   public string status { get; set; } = String.Empty;
   public int userId { get; set; }
 }
+
+public class PlayerInfoDTO
+{
+  public int playerId { get; set; }
+  public string status { get; set; } = String.Empty;
+}

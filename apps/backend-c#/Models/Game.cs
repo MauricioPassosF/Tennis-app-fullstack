@@ -8,9 +8,10 @@ public class Game
 
   [Key]
   public int GameId { get; set; }
-  public int PlayerAScore { get; set; }
-  public int PlayerBScore { get; set; }
+  public int PlayerAScore { get; set; } = 0;
+  public int PlayerBScore { get; set; } = 0;
   public string Status { get; set; } = String.Empty;
+  public DateTime? GameDateTime { get; set; }
 
   [ForeignKey("PlayerAId")]
   public int PlayerAId { get; set; }
