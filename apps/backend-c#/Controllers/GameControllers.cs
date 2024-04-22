@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Tennis.DTO;
 using Tennis.Models;
 using Tennis.Repository;
 
@@ -32,7 +33,7 @@ public class GameController : Controller
   }
 
   [HttpPost]
-  public IActionResult Add([FromBody] Game game)
+  public IActionResult Add([FromBody] AddGameDTO game)
   {
     return Created("", _repository.AddGame(game));
   }

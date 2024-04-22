@@ -16,6 +16,18 @@ public class GameDTO
 
 public class AddGameDTO
 {
+  public int GameId { get; set; }
+  public string Status { get; set; } = String.Empty;
+  public string? GameDateTime { get; set; }
+  public int TournamentId { get; set; }
+  public int PlayerAScore { get; set; }
+  public int PlayerBScore { get; set; }
+  public int PlayerAId { get; set; }
+  public int PlayerBId { get; set; }
+}
+
+public class AddGameDateTimeDTO
+{
   public int gameId { get; set; }
   public string gameStatus { get; set; } = String.Empty;
   public DateTime? gameDateTime { get; set; }

@@ -74,12 +74,19 @@ public class Program
     {
       app.UseSwagger();
       app.UseSwaggerUI();
+      // app.UseCors(builder => builder.WithOrigins("http://localhost:5194") // Substitua por seu domínio
+      //                             .WithMethods("GET", "POST", "PUT", "DELETE")
+      //                             .WithHeaders("Authorization", "Content-Type")
+      //                             .AllowCredentials()
+      //                             .SetIsOriginAllowedToAllowWildcardSubdomains()
+      //                             .WithExposedHeaders("WWW-Authenticate"));
     }
 
     app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
     app.UseHttpsRedirection();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

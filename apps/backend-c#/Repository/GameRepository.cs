@@ -66,20 +66,39 @@ public class GameRepository : IGameRepository
       playerBLastName = game.PlayerB.User.LastName,
     }).ToList();
   }
-  public AddGameDTO AddGame(Game game)
+  public AddGameDateTimeDTO AddGame(AddGameDTO gameInfo)
   {
-    _context.Games.Add(game);
-    _context.SaveChanges();
-    return new AddGameDTO
+
+    Game newGame = new Game
     {
-      gameId = game.GameId,
-      playerAId = game.PlayerAId,
-      playerAScore = game.PlayerAScore,
-      playerBId = game.PlayerBId,
-      playerBScore = game.PlayerBScore,
-      tournamentId = game.TournamentId,
-      gameStatus = game.Status,
-      gameDateTime = game.GameDateTime
+      GameId = gameInfo.GameId,
+      PlayerAId = gameInfo.PlayerAId,
+      PlayerBId = gameInfo.PlayerBId,
+      PlayerAScore = gameInfo.PlayerAScore,
+      PlayerBScore = gameInfo.PlayerBScore,
+      TournamentId = gameInfo.TournamentId,
+      Status = gameInfo.Status
+    };
+    if (gameInfo.GameDateTime != null)
+    {
+      DateTime gameDateTime;
+      if (DateTime.TryParse(gameInfo.GameDateTime, out gameDateTime))
+      {
+        newGame.GameDateTime = gameDateTime;
+      };
+    }
+    _context.Games.Add(newGame);
+    _context.SaveChanges();
+    return new AddGameDateTimeDTO
+    {
+      gameId = newGame.GameId,
+      playerAId = newGame.PlayerAId,
+      playerAScore = newGame.PlayerAScore,
+      playerBId = newGame.PlayerBId,
+      playerBScore = newGame.PlayerBScore,
+      tournamentId = newGame.TournamentId,
+      gameStatus = newGame.Status,
+      gameDateTime = newGame.GameDateTime
     };
   }
 }

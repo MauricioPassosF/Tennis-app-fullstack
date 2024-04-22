@@ -7,5 +7,5 @@ public interface IGameRepository
 {
   GameDTO? GetGameById(int gameId);
   IEnumerable<GameDTO> GetAllGames();
-  AddGameDTO AddGame(Game game);
+  AddGameDateTimeDTO AddGame(AddGameDTO gameInfo);
 }

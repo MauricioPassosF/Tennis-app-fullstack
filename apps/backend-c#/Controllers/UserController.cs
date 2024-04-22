@@ -1,12 +1,14 @@
 namespace Tennis.Controllers;
 
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tennis.Models;
 using Tennis.Repository;
 
 [ApiController]
 [Route("user")]
-
+[Authorize]
 public class UserController : Controller
 {
   protected readonly IUserRepository _repository;
@@ -41,6 +43,8 @@ public class UserController : Controller
   [HttpPost]
   public IActionResult Add([FromBody] User user)
   {
+    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    Console.WriteLine($"Teste {userId}");
     return Created("", _repository.AddUser(user));
   }
 
