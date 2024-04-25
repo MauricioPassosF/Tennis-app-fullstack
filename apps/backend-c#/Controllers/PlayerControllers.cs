@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tennis.Models;
 using Tennis.Repository;
@@ -29,6 +30,7 @@ public class PlayerController : Controller
     return Ok(player);
   }
 
+  [Authorize]
   [HttpGet("user/{userId}")]
   public IActionResult GetByUserId(int userId)
   {

@@ -3,6 +3,7 @@ import { User } from '../types/User';
 
 export type ContextValueType = {
   user : User | null;
+  token: string | undefined;
 };
 
 export type AppContextType = {

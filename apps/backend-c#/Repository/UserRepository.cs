@@ -26,6 +26,20 @@ public class UserRepository : IUserRepository
     };
   }
 
+  public UserDTO? GetUserByEmail(string email)
+  {
+    var user = _context.Users
+    .FirstOrDefault(user => user.Email == email);
+    if (user == null) { return null; };
+    return new UserDTO
+    {
+      userId = user.UserId,
+      firstName = user.FirstName,
+      lastName = user.LastName,
+      email = user.Email
+    };
+  }
+
   public IEnumerable<UserDTO> GetAllUsers()
   {
     return _context.Users.Select(user => new UserDTO

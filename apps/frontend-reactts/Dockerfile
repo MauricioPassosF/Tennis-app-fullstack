@@ -1,4 +1,4 @@
-FROM node:16.14-alpine
+FROM node:18.20-alpine
 WORKDIR /app-frontend
 COPY package.json .
 RUN npm install

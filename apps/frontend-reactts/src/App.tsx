@@ -19,6 +19,7 @@ function App() {
 
   const [context, setContext] = useState<ContextValueType>({
     user: null,
+    token: undefined,
   });
 
   const contextValue = useMemo(() => ({ context, setContext }), [context, setContext]);
