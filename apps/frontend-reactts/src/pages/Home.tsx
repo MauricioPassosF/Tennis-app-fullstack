@@ -1,143 +1,16 @@
-import { useContext, useEffect, useState } from 'react';
+import {
+  useContext, useEffect, useState,
+} from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import AppContext from '../context/AppContext';
 import Header from '../components/Header';
-
-type AdminTournament = {
-  tournamentId: number;
-  tournamentName: string;
-  tournamentStatus: string;
-};
-
-type PlayerInfo = {
-  playerId: number;
-  status: 'Apto' | 'Ausente' | 'Lesionado'
-};
-
-type AddPlayerInfo = {
-  userId: number;
-  status: 'Apto' | 'Ausente' | 'Lesionado'
-};
-
-type LoginInfo = {
-  email: string;
-  token: string
-};
-
-type NewTournamentInputs = {
-  newTournamentName: string;
-  newTournamentPrize: number;
-};
-
-const getLoginInfo = (): LoginInfo => {
-  const login = localStorage.getItem('login');
-  const loginInfo = login ? JSON.parse(login) : { token: '' };
-  return loginInfo;
-};
-
-const getUserPlayerInfo = async (userId: number, token: string):
-Promise<PlayerInfo | undefined> => {
-  try {
-    const response = await fetch(`http://localhost:8080/player/user/${userId}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      return undefined;
-    }
-    const data: PlayerInfo = await response.json();
-    return data;
-  } catch (error) {
-    Swal.fire({ title: 'Erro', text: 'Falha na requisição' });
-    return undefined;
-  }
-};
-
-const getPlayerTournaments = async (playerId: number): Promise<AdminTournament[] | undefined> => {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/player/${playerId}/tournaments`,
-      { method: 'GET' },
-    );
-    const data: AdminTournament[] = await response.json();
-    return data;
-  } catch (error) {
-    Swal.fire({ title: 'Erro', text: `${error}` });
-    return undefined;
-  }
-};
-
-const getUserTournaments = async (userId: number, token: string):
-Promise<AdminTournament[] | undefined> => {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/user/${userId}/tournaments`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    const data: AdminTournament[] = await response.json();
-    return data;
-  } catch (error) {
-    Swal.fire({ title: 'Erro', text: `${error}` });
-    return undefined;
-  }
-};
-
-// adicionar autorizacao
-const addTournament = async (newTournament: NewTournamentInputs, userId: number):
-Promise <boolean > => {
-  try {
-    const response = await fetch('http://localhost:8080/tournament', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: newTournament.newTournamentName,
-        status: 'Não iniciado',
-        prizeMoney: newTournament.newTournamentPrize,
-        userId,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error('Erro ao criar torneio');
-    }
-    return response.ok;
-  } catch (error) {
-    Swal.fire({ title: 'Erro', text: `${error}` });
-    return false;
-  }
-};
-
-// adicionar autorizacao
-const addAsPlayer = async (addPlayerInfo: AddPlayerInfo): Promise <PlayerInfo | undefined > => {
-  try {
-    const response = await fetch('http://localhost:8080/player', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(addPlayerInfo),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      const { playerId, status } = data;
-      return { playerId, status };
-    }
-    return undefined;
-  } catch (error) {
-    Swal.fire({ title: 'Erro', text: `${error}` });
-    return undefined;
-  }
-};
+import { getUserTournaments } from '../services/fetchs/fetchUser';
+import { AdminTournament, NewTournamentInputs } from '../types/Tournament';
+import { addAsPlayer, getPlayerTournaments, getUserPlayerInfo } from '../services/fetchs/fetchPlayer';
+import { PlayerInfo } from '../types/Player';
+import { addTournament } from '../services/fetchs/fetchTournament';
+import getLoginInfo from '../services/localStorage';
 
 function Home(): JSX.Element {
   const appContext = useContext(AppContext);
@@ -150,6 +23,7 @@ function Home(): JSX.Element {
     newTournamentPrize: 0,
   });
   const [addAsPlayerInput, setAddAsPlayerInput] = useState<string>('');
+  const [shouldFetchUserdata, setShouldFetchUserdata] = useState<boolean>(true);
   const { user, token } = context;
   const navigate = useNavigate();
 
@@ -172,8 +46,11 @@ function Home(): JSX.Element {
         }
       }
     }
-    fetchData();
-  }, [context, setContext, token, user, navigate]);
+    if (shouldFetchUserdata) {
+      fetchData();
+      setShouldFetchUserdata(false);
+    }
+  }, [context, setContext, token, user, navigate, shouldFetchUserdata]);
 
   useEffect(() => {
     async function fetchData() {
@@ -200,6 +77,7 @@ function Home(): JSX.Element {
         newTournamentName: '',
         newTournamentPrize: 0,
       });
+      setShouldFetchUserdata(true);
     }
   };
 

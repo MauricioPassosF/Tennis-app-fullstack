@@ -1,159 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-
-type TournamentInfo = {
-  tournamentId: number;
-  tournamentName: string;
-  tournamentStatus: string;
-  prizeMoney: number;
-  admFirstName: string;
-  admLastName: string;
-};
-
-type TournamentError = {
-  message: string;
-};
-
-type TournamentGame = {
-  gameId: number;
-  gameStatus: string;
-  playerAScore: number;
-  playerBScore: number;
-  playerAFirstName: string;
-  playerALastName: string;
-  playerBFirstName: string;
-  playerBLastName: string;
-};
-
-type TournamentPlayer = {
-  playerId: number;
-  firstName: string;
-  lastName: string;
-  status: string;
-  email: string;
-};
+import {
+  addPlayer, getTournamentGames, getTournamentInfo, getTournamentPlayers,
+} from '../services/fetchs/fetchTournament';
+import { TournamentGame, TournamentInfo, TournamentPlayer } from '../types/Tournament';
+import { AddPlayerInTournament } from '../types/Player';
+import { AddGame } from '../types/Game';
+import addGame from '../services/fetchs/fetchGame';
 
 type EditTournament = 'AddGame' | 'AddPlayer' | 'Edit' | 'Delete' | '';
-
-type AddGame = {
-  playerAScore: number;
-  playerBScore: number;
-  playerAId: number;
-  playerBId: number;
-  Status: string;
-  TournamentId: number;
-};
-
-type AddPlayer = {
-  playerId: number;
-  TournamentId: number;
-};
-
-const getTournamentInfo = async (tournamentId: number): Promise<TournamentInfo | undefined> => {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/tournament/${tournamentId}`,
-      { method: 'GET' },
-    );
-    const data: TournamentInfo | TournamentError = await response.json();
-    const { message } = data as TournamentError;
-    if (message) {
-      throw new Error(message);
-    }
-    return data as TournamentInfo;
-  } catch (error) {
-    console.log(error);
-    return undefined;
-  }
-};
-
-const getTournamentGames = async (tournamentId: number): Promise<TournamentGame[] | undefined> => {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/tournament/${tournamentId}/games`,
-      { method: 'GET' },
-    );
-    const data: TournamentGame[] | TournamentError = await response.json();
-    const { message } = data as TournamentError;
-    if (message) {
-      throw new Error(message);
-    }
-    return data as TournamentGame[];
-  } catch (error) {
-    console.log(error);
-    return undefined;
-  }
-};
-
-const getTournamentPlayers = async (tournamentId: number):
-Promise<TournamentPlayer[] | undefined> => {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/tournament/${tournamentId}/players`,
-      { method: 'GET' },
-    );
-    const data: TournamentPlayer[] | TournamentError = await response.json();
-    const { message } = data as TournamentError;
-    if (message) {
-      throw new Error(message);
-    }
-    return data as TournamentPlayer[];
-  } catch (error) {
-    console.log(error);
-    return undefined;
-  }
-};
 
 const initialNewGameInfo = {
   playerAScore: 0,
   playerBScore: 0,
   playerAId: 0,
   playerBId: 0,
-  Status: 'Agendada',
-};
-
-const addPlayer = async (
-  newPlayer: AddPlayer,
-): Promise <boolean | undefined> => {
-  try {
-    const response = await fetch('http://localhost:8080/tournament/addPlayer', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newPlayer),
-    });
-    return response.ok;
-  } catch (error) {
-    console.log(error);
-    return undefined;
-  }
-};
-
-const addGame = async (
-  newGameInfo: AddGame,
-  // setNewGameInfo: (value: React.SetStateAction<AddGame>) => void,
-)
-: Promise<boolean | undefined> => {
-  try {
-    const response = await fetch('http://localhost:8080/game', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newGameInfo),
-    });
-    console.log(response);
-    return response.ok;
-    // if (response.ok) {
-    //   const data = await response.json();
-    //   setNewGameInfo({ ...initialNewGameInfo, TournamentId: newGameInfo.TournamentId });
-    //   console.log(data);
-    // }
-  } catch (error) {
-    console.log(error);
-    return undefined;
-  }
+  Status: 'Não agendado',
 };
 
 function Tournament(): JSX.Element {
@@ -164,7 +26,7 @@ function Tournament(): JSX.Element {
   const [tournamentPlayers, setTournamentPlayers] = useState<TournamentPlayer[]>([]);
   const [editTournament, setEditTournament] = useState<EditTournament>('');
   const [refresh, setRefresh] = useState<boolean>(false);
-  const [newPlayer, setNewPlayer] = useState<AddPlayer>({
+  const [newPlayer, setNewPlayer] = useState<AddPlayerInTournament>({
     playerId: 0, TournamentId: tournamentId,
   });
   const [newGameInfo, setNewGameInfo] = useState<AddGame>({
@@ -193,6 +55,23 @@ function Tournament(): JSX.Element {
   const handleNewGameInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setNewGameInfo({ ...newGameInfo, [name]: value });
+  };
+
+  const handleAddNewGameButton = async (): Promise<void> => {
+    const responseAddNewGame = await addGame(newGameInfo);
+    if (responseAddNewGame) {
+      setEditTournament('');
+      setNewGameInfo({ ...initialNewGameInfo, TournamentId: tournamentId });
+      setRefresh(!refresh);
+    }
+  };
+
+  const handleAddNewPlayerButton = async (): Promise<void> => {
+    const responseAddNewPlayer = await addPlayer(newPlayer);
+    if (responseAddNewPlayer) {
+      setEditTournament('');
+      setRefresh(!refresh);
+    }
   };
 
   return (
@@ -225,40 +104,23 @@ function Tournament(): JSX.Element {
                 <input type="number" name="playerBId" onChange={handleNewGameInfo} value={playerBId} />
               </label>
             </form>
-            <button
-              type="submit"
-              onClick={async () => {
-                const responseStatus = await addGame(newGameInfo);
-                if (responseStatus) {
-                  setEditTournament('');
-                  setNewGameInfo({ ...initialNewGameInfo, TournamentId: tournamentId });
-                  setRefresh(!refresh);
-                }
-              }}
-            >
+            <button type="submit" onClick={handleAddNewGameButton}>
               Adicionar
             </button>
           </div>
         )}
         {editTournament === 'AddPlayer' && (
-          <form>
-            <label htmlFor="playerId">
-              Digite Id do jogador:
-              <input type="number" name="playerId" onChange={(event) => setNewPlayer({ ...newPlayer, playerId: Number(event.target.value) })} value={newPlayer.playerId} />
-            </label>
-            <button
-              type="submit"
-              onClick={async () => {
-                const responseStatus = await addPlayer(newPlayer);
-                if (responseStatus) {
-                  setEditTournament('');
-                  setRefresh(!refresh);
-                }
-              }}
-            >
+          <div>
+            <form>
+              <label htmlFor="playerId">
+                Digite Id do jogador:
+                <input type="number" name="playerId" onChange={(event) => setNewPlayer({ ...newPlayer, playerId: Number(event.target.value) })} value={newPlayer.playerId} />
+              </label>
+            </form>
+            <button type="submit" onClick={handleAddNewPlayerButton}>
               Adicionar
             </button>
-          </form>
+          </div>
         )}
       </div>
       <div>
