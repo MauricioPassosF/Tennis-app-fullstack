@@ -11,7 +11,6 @@ export const getUserByEmail = async (token: string, email: string): Promise<User
       },
     });
     const data: User = await response.json();
-    console.log(data);
     if (data.email === email) {
       return data;
     }
