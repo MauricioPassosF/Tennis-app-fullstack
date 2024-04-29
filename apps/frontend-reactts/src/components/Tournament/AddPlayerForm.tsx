@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 import { addPlayer } from '../../services/fetchs/fetchTournament';
 import { AddPlayerInTournament } from '../../types/Player';
 import { IFormsProps } from '../../interfaces/TournamentInterfaces';
+import validateNewPlayer from '../../services/validations/validatePlayer';
 
 export default function AddPlayerForm({ formsProps }: IFormsProps): JSX.Element {
   const {
@@ -12,9 +14,15 @@ export default function AddPlayerForm({ formsProps }: IFormsProps): JSX.Element 
   });
 
   const handleAddNewPlayerButton = async (): Promise<void> => {
-    const responseAddNewPlayer = await addPlayer(newPlayer);
-    if (responseAddNewPlayer) {
-      finishEditTournament(refresh);
+    try {
+      validateNewPlayer(newPlayer);
+      const responseAddNewPlayer = await addPlayer(newPlayer);
+      if (responseAddNewPlayer) {
+        setNewPlayer({ ...newPlayer, playerId: 0 });
+        finishEditTournament(refresh);
+      }
+    } catch (error) {
+      Swal.fire({ title: 'Erro', text: `${error}` });
     }
   };
 

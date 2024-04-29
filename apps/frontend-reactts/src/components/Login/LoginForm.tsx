@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import Swal from 'sweetalert2';
 import { LoginInputs } from '../../types/Login';
 import getLoginInfo from '../../services/localStorage';
 import { ILoginFormProps } from '../../interfaces/LoginInterfaces';
+import { validateLogin } from '../../services/validations/validateLogin';
 
 export default function LoginForm({ handleLogin, handleGetUser }: ILoginFormProps): JSX.Element {
   const [loginInputs, setLoginInputs] = useState<LoginInputs>({
@@ -25,7 +27,12 @@ export default function LoginForm({ handleLogin, handleGetUser }: ILoginFormProp
   }, [handleGetUser]);
 
   const handleLoginButton = async (): Promise <void> => {
-    handleLogin(loginInputs);
+    try {
+      validateLogin(loginInputs);
+      handleLogin(loginInputs);
+    } catch (error) {
+      Swal.fire({ title: 'Erro', text: `${error}` });
+    }
   };
 
   const handleLoginInputs = (event: React.ChangeEvent<HTMLInputElement>) => {

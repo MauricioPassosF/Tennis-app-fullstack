@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { AddGame } from '../../types/Game';
 import addGame from '../../services/fetchs/fetchGame';
 import { IAddGameForm } from '../../interfaces/TournamentInterfaces';
+import validatePlayersId from '../../services/validations/validateGame';
 
 const initialNewGameInfo = {
   playerAScore: 0,
@@ -33,9 +34,7 @@ export default function AddGameForm(props: IAddGameForm): JSX.Element {
 
   const handleAddNewGameButton = async (): Promise<void> => {
     try {
-      if (playerAId === 0 || playerBId === 0) {
-        throw new Error('Jogador nào selecionado');
-      }
+      validatePlayersId(playerAId, playerBId);
       const responseAddNewGame = await addGame(newGameInfo);
       if (responseAddNewGame) {
         setNewGameInfo({ ...initialNewGameInfo, TournamentId: tournamentId });

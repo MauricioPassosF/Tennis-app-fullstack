@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 import { signup } from '../../services/fetchs/fetchLogin';
 import { SignupInfo, SignupInputs } from '../../types/Login';
 import { ISignupFormProps } from '../../interfaces/LoginInterfaces';
+import { validateSignUp } from '../../services/validations/validateLogin';
 
 export default function SignupForm({ handleSignup }: ISignupFormProps): JSX.Element {
   const [signupInputs, setSignupInputs] = useState<SignupInputs>({
@@ -19,10 +21,15 @@ export default function SignupForm({ handleSignup }: ISignupFormProps): JSX.Elem
       email: signupInputs.newEmail,
       password: signupInputs.newPassword,
     };
-    const signupResponse: boolean = await signup(signUpInfo);
-    if (signupResponse) {
-      handleLogin({ email: signupInputs.newEmail, password: signupInputs.newPassword });
-      setSignupActive(false);
+    try {
+      validateSignUp(signUpInfo);
+      const signupResponse: boolean = await signup(signUpInfo);
+      if (signupResponse) {
+        handleLogin({ email: signupInputs.newEmail, password: signupInputs.newPassword });
+        setSignupActive(false);
+      }
+    } catch (error) {
+      Swal.fire({ title: 'Erro', text: `${error}` });
     }
   };
 

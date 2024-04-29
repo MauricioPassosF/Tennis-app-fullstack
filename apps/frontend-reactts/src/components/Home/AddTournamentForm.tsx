@@ -1,8 +1,10 @@
 import { useContext, useState } from 'react';
+import Swal from 'sweetalert2';
 import AppContext from '../../context/AppContext';
 import { NewTournamentInputs } from '../../types/Tournament';
 import { addTournament } from '../../services/fetchs/fetchTournament';
 import { IAddTournamentForm } from '../../interfaces/HomeInterfaces';
+import validateTournament from '../../services/validations/validateTournament';
 
 const tournamentInitialValues: NewTournamentInputs = {
   newTournamentName: '',
@@ -24,11 +26,16 @@ export default function AddTournamentForm(props: IAddTournamentForm):JSX.Element
   };
 
   const handleAddTournamentButton = async (): Promise<void> => {
-    const addTournamentResponse = await addTournament(newTournamentInputs, user!.userId);
-    if (addTournamentResponse) {
-      setNewTournamentInputs(tournamentInitialValues);
-      setAddFormActive(false);
-      setShouldFetchUserData(true);
+    try {
+      validateTournament(newTournamentInputs);
+      const addTournamentResponse = await addTournament(newTournamentInputs, user!.userId);
+      if (addTournamentResponse) {
+        setNewTournamentInputs(tournamentInitialValues);
+        setAddFormActive(false);
+        setShouldFetchUserData(true);
+      }
+    } catch (error) {
+      Swal.fire({ title: 'Erro', text: `${error}` });
     }
   };
 
