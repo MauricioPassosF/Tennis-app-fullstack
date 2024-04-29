@@ -41,3 +41,5 @@ export type NewTournamentInputs = {
   newTournamentName: string;
   newTournamentPrize: number;
 };
+
+export type EditTournament = 'AddGame' | 'AddPlayer' | 'Edit' | 'Delete' | '';

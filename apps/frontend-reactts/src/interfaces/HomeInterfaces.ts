@@ -13,3 +13,7 @@ export interface IShouldFetchProp {
     shouldFetchUserData: boolean;
   }
 }
+
+export interface IAddTournamentForm extends IShouldFetchProp {
+  setAddFormActive: React.Dispatch<React.SetStateAction<boolean>>;
+}

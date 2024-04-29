@@ -1,13 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { LoginInputs } from '../../types/Login';
 import getLoginInfo from '../../services/localStorage';
+import { ILoginFormProps } from '../../interfaces/LoginInterfaces';
 
-interface LoginFormProps {
-  handleLogin: (inputs: LoginInputs) => void;
-  handleGetUser: (token: string, email: string) => void;
-}
-
-function LoginForm({ handleLogin, handleGetUser }: LoginFormProps): JSX.Element {
+export default function LoginForm({ handleLogin, handleGetUser }: ILoginFormProps): JSX.Element {
   const [loginInputs, setLoginInputs] = useState<LoginInputs>({
     email: '',
     password: '',
@@ -56,5 +52,3 @@ function LoginForm({ handleLogin, handleGetUser }: LoginFormProps): JSX.Element 
     </div>
   );
 }
-
-export default LoginForm;

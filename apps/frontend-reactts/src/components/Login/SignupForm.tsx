@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { signup } from '../../services/fetchs/fetchLogin';
-import { LoginInputs, SignupInfo, SignupInputs } from '../../types/Login';
+import { SignupInfo, SignupInputs } from '../../types/Login';
+import { ISignupFormProps } from '../../interfaces/LoginInterfaces';
 
-interface SignupFormProps {
-  handleLogin: (inputs: LoginInputs) => void;
-}
-
-function SignupForm({ handleLogin }: SignupFormProps): JSX.Element {
+export default function SignupForm({ handleSignup }: ISignupFormProps): JSX.Element {
   const [signupInputs, setSignupInputs] = useState<SignupInputs>({
     newFirstName: '',
     newLastName: '',
     newEmail: '',
     newPassword: '',
   });
+  const { handleLogin, setSignupActive } = handleSignup;
 
   const handleSignupButton = async (): Promise <void> => {
     const signUpInfo: SignupInfo = {
@@ -24,6 +22,7 @@ function SignupForm({ handleLogin }: SignupFormProps): JSX.Element {
     const signupResponse: boolean = await signup(signUpInfo);
     if (signupResponse) {
       handleLogin({ email: signupInputs.newEmail, password: signupInputs.newPassword });
+      setSignupActive(false);
     }
   };
 
@@ -60,5 +59,3 @@ function SignupForm({ handleLogin }: SignupFormProps): JSX.Element {
     </div>
   );
 }
-
-export default SignupForm;

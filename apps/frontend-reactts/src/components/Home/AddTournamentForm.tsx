@@ -2,16 +2,17 @@ import { useContext, useState } from 'react';
 import AppContext from '../../context/AppContext';
 import { NewTournamentInputs } from '../../types/Tournament';
 import { addTournament } from '../../services/fetchs/fetchTournament';
-import { IShouldFetchProp } from '../../interfaces/HomeInterfaces';
+import { IAddTournamentForm } from '../../interfaces/HomeInterfaces';
 
 const tournamentInitialValues: NewTournamentInputs = {
   newTournamentName: '',
   newTournamentPrize: 0,
 };
 
-export default function AddTournamentForm({ shouldFetchProp }: IShouldFetchProp):JSX.Element {
+export default function AddTournamentForm(props: IAddTournamentForm):JSX.Element {
   const appContext = useContext(AppContext);
   const { context: { user } } = appContext;
+  const { shouldFetchProp, setAddFormActive } = props;
   const { setShouldFetchUserData } = shouldFetchProp;
   const [newTournamentInputs, setNewTournamentInputs] = useState<NewTournamentInputs>(
     tournamentInitialValues,
@@ -26,6 +27,7 @@ export default function AddTournamentForm({ shouldFetchProp }: IShouldFetchProp)
     const addTournamentResponse = await addTournament(newTournamentInputs, user!.userId);
     if (addTournamentResponse) {
       setNewTournamentInputs(tournamentInitialValues);
+      setAddFormActive(false);
       setShouldFetchUserData(true);
     }
   };

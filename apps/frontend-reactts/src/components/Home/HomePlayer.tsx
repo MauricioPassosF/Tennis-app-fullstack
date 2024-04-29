@@ -7,6 +7,7 @@ import { IPlayerInfoState } from '../../interfaces/HomeInterfaces';
 export default function HomePlayer({ playerInfoState }: IPlayerInfoState): JSX.Element {
   const [addAsPlayerInput, setAddAsPlayerInput] = useState<string>('');
   const { playerInfo, setPlayerInfo } = playerInfoState;
+  const [registerFormActive, setRegisterFormActive] = useState<boolean>(false);
   const appContext = useContext(AppContext);
   const { context } = appContext;
   const { user, token } = context;
@@ -30,6 +31,7 @@ export default function HomePlayer({ playerInfoState }: IPlayerInfoState): JSX.E
       if (addAsPlayerResponse) {
         setPlayerInfo(addAsPlayerResponse);
         setAddAsPlayerInput('');
+        setRegisterFormActive(false);
       }
     }
   };
@@ -39,18 +41,26 @@ export default function HomePlayer({ playerInfoState }: IPlayerInfoState): JSX.E
       <h1>Jogador</h1>
       {!playerInfo ? (
         <div>
-          <h2>Usuário não está cadastrado como jogador</h2>
-          <h3> Cadastrar como jogador:</h3>
-          <select
-            value={addAsPlayerInput}
-            onChange={(event) => setAddAsPlayerInput(event.target.value)}
-          >
-            <option value="" disabled>Selecione o status</option>
-            <option value="Apto">Apto</option>
-            <option value="Ausente">Ausente</option>
-            <option value="Lesionado">Lesionado</option>
-          </select>
-          <button type="button" onClick={handleAddAsPlayerButton}>Cadastrar</button>
+          {!registerFormActive ? (
+            <div>
+              <h2>Usuário não está cadastrado como jogador</h2>
+              <button type="button" onClick={() => setRegisterFormActive(true)}>Cadastrar</button>
+            </div>
+          ) : (
+            <div>
+              <h3> Cadastrar como jogador:</h3>
+              <select
+                value={addAsPlayerInput}
+                onChange={(event) => setAddAsPlayerInput(event.target.value)}
+              >
+                <option value="" disabled>Selecione o status</option>
+                <option value="Apto">Apto</option>
+                <option value="Ausente">Ausente</option>
+                <option value="Lesionado">Lesionado</option>
+              </select>
+              <button type="button" onClick={handleAddAsPlayerButton}>Cadastrar</button>
+            </div>
+          )}
         </div>
       ) : (
         <div>

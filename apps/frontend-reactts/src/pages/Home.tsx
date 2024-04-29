@@ -6,11 +6,10 @@ import Header from '../components/Header';
 import { PlayerInfo } from '../types/Player';
 import getLoginInfo from '../services/localStorage';
 import HomePlayer from '../components/Home/HomePlayer';
-import AddTournamentForm from '../components/Home/AddTournamentForm';
 import PlayerTournaments from '../components/Home/PlayerTournaments';
 import AdminTournaments from '../components/Home/AdminTournaments';
 
-function Home(): JSX.Element {
+export default function Home(): JSX.Element {
   const appContext = useContext(AppContext);
   const { context, setContext } = appContext;
   const [playerInfo, setPlayerInfo] = useState<PlayerInfo | undefined>();
@@ -32,10 +31,7 @@ function Home(): JSX.Element {
       <Header />
       <HomePlayer playerInfoState={playerInfoState} />
       <AdminTournaments shouldFetchProp={shouldFetchProp} />
-      <AddTournamentForm shouldFetchProp={shouldFetchProp} />
       <PlayerTournaments playerInfoState={playerInfoState} />
     </>
   );
 }
-
-export default Home;

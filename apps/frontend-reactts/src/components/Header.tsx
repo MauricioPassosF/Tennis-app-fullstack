@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 
-function Header(): JSX.Element {
+export default function Header(): JSX.Element {
   const { context, setContext } = useContext(AppContext);
   const { user } = context;
   const navigate = useNavigate();
@@ -21,5 +21,3 @@ function Header(): JSX.Element {
     </header>
   );
 }
-
-export default Header;
