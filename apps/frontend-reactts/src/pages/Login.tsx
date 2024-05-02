@@ -1,11 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useContext, useState } from 'react';
+import styled from 'styled-components';
 import LoginForm from '../components/Login/LoginForm';
 import SignupForm from '../components/Login/SignupForm';
 import { login } from '../services/fetchs/fetchLogin';
 import { LoginInputs } from '../types/Login';
 import { getUserByEmail } from '../services/fetchs/fetchUser';
 import AppContext from '../context/AppContext';
+
+const LoginPage = styled.div`
+  margin: 0 auto;
+  background-color: green;
+  padding: 20px 0px;
+  border-radius: 12px;
+`;
 
 export default function Login(): JSX.Element {
   const navigate = useNavigate();
@@ -32,7 +40,7 @@ export default function Login(): JSX.Element {
   const handleSignup = { handleLogin, setSignupActive };
 
   return (
-    <div>
+    <LoginPage>
       {!signupActive
         ? (
           <div>
@@ -41,6 +49,6 @@ export default function Login(): JSX.Element {
           </div>
         )
         : (<SignupForm handleSignup={handleSignup} />)}
-    </div>
+    </LoginPage>
   );
 }
